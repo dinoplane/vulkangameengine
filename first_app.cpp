@@ -4,6 +4,7 @@
 
 namespace ave {
     FirstApp::FirstApp(){
+        loadModels();
         createPipelineLayout();
         createPipeline();
         createCommandBuffers();
@@ -19,6 +20,33 @@ namespace ave {
             drawFrame();
         }
         vkDeviceWaitIdle(aveDevice.device()); // Block until all GPU ops are done
+    };
+
+    void FirstApp::triforce(std::vector<AveModel::Vertex> &v, AveModel::Vertex v1, AveModel::Vertex v2, AveModel::Vertex v3, float n){
+        if (n == 0){
+            v.push_back(v1);
+            v.push_back(v2);
+            v.push_back(v3);
+            return;
+        }
+        AveModel::Vertex m12 = (v1 + v2) / 2.0f;
+        AveModel::Vertex m23 = (v2 + v3) / 2.0f;
+        AveModel::Vertex m13 = (v1 + v3) / 2.0f;
+
+        triforce(v, v1, m12, m13, n - 1);
+        triforce(v, m12, v2, m23, n - 1);
+        triforce(v, m13, m23, v3, n - 1);
+    };
+
+    void FirstApp::loadModels(){
+        std::vector<AveModel::Vertex> vertices;
+        FirstApp::triforce(vertices,
+            {{0.0f, -1.0f}, {1.0, 0.0, 1.0}},
+            {{1.0f, 1.0f}, {1.0, 1.0, 0.0}},
+            {{-1.0f, 1.0f}, {0.0, 1.0, 1.0}},
+            9);
+
+        aveModel = std::make_unique<AveModel>(aveDevice, vertices);
     };
 
     void FirstApp::createPipelineLayout(){
@@ -81,7 +109,10 @@ namespace ave {
             vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
             avePipeline->bind(commandBuffers[i]);
-            vkCmdDraw(commandBuffers[i], 3, 1, 0, 0);// 3 vertices, 1 instance, no offsets
+            aveModel->bind(commandBuffers[i]);
+            aveModel->draw(commandBuffers[i]);
+
+            // vkCmdDraw(commandBuffers[i], 3, 1, 0, 0);// 3 vertices, 1 instance, no offsets
 
             vkCmdEndRenderPass(commandBuffers[i]);
             if (vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS){

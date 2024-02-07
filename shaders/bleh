@@ -1,3 +1,110 @@
-Review Gaussian Distribution
+GANs for
 
-Review complex Gaussian
+Artificial intelligence for Hemodynamic Analysis of Cardiovascular Medicine
+
+- Hemodynamics
+how blood flows through blood vessels
+- Heart rate
+- Flow velocity
+- Blood pressure
+
+
+Abnormalities correlated with Cardiovascular disease
+
+Sensors can monitor blood flow that MRIs and go beyond curent technology
+
+Hemodynamic database can more accurately predict sisease and provide better treatment
+
+
+
+Multi-agent Reinforcemtn Learning
+
+Async Communication RObustness and Privacy
+
+
+
+Large Application scale
+Enormus number os states
+
+Cooperated L
+Keep private data decentralized
+Model learning in agent side
+Cooperative learning
+
+
+
+Update the model with personal data
+
+
+
+
+
+Non-Eculidean Mixtue Model for Social Network Embedding
+
+Social Netweoks omnipresent they model interactions on social platforms
+
+Analysis key to several
+
+Network links are formed by homophily and social indluence
+
+associated nodes imply feature similarity
+
+popular nodes have direc influence in forming links
+
+
+Objservations Shallow embedding models do not effectively learn graph structure
+
+Models do not captuea ll netwoerk factos
+
+All network structures are modeled in the same space
+
+
+
+
+
+
+encoder maps nodes into z^s homophily and z^h social influence
+
+Objective maximize likeluhood to obsere links
+
+design space unification component to alighn the distinct geometric spaces'
+ensuring two embeddings of the same node are coesponding to each other
+
+
+
+HUman I/O
+Towarsd a Unified Appraich to deteci/n/g situua/ti/onal impariments
+
+
+- temporary disability
+
+accents, distracion, stress
+
+SIIDS are duynamic and pervasive
+
+
+Unified approach to detect impairments
+
+HUman IO channel availability
+
+
+Stared with a formative white boad susdy
+
+
+Human IO system that sees what you seees and what you can
+
+
+
+tecjmica;; evauation
+
+Processing module
+
+
+Chamelion Compositional Reasoning with LLMs
+
+Chain of thought pompting
+
+
+
+
+

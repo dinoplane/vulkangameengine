@@ -77,3 +77,234 @@ out of sample prediction errr rates
 
 parameter sensitives
 =
+
+
+
+
+
+
+
+
+
+
+Nathan Sturtevant
+Re-searching the foundations of heuristic search
+
+Upperbound.ai (travel scholarships)
+
+
+Works in games
+- mL in games
+solving games
+- core search algoithsm
+multi-agent pathfinding
+
+Pathfinding in games
+puzzle entropy
+ai-assited design
+
+O_O
+
+heurisitc search and shortedt path problems
+- output is always a path
+
+nightingale - inflexion games
+- heurisitc can be a path to a goal or an abstract problem traversing through states
+- Djikstra's search, A*, Weighted A*, Bidirectional search, IDA*
+
+
+Consistent Heuristic, Inconsistent Heuristic
+- consistency may influence performance
+
+state re-expansions
+- when we revisit a state that we have expanded before
+
+- many alforithsm encounter wost case behavior when researching though previou
+visited states
+
+inconsistent heurisitcs
+-
+
+
+interelated with generative AI because we start seeing sam eproblems when we apply ML to search
+
+
+alfgoithm
+
+
+djikstera's algorithm
+- uniform cost search
+expand uniformly
+g(n) the best knon path frm start to n
+
+expand states from low to high g(n)
+(priority is based on cost so far)
+
+
+assume that edge cost c(a, b) > 0
+
+what happens when we have a negative edges, then we need to do re-expansion
+
+worst case exponential
+cant handle negative cost cycles!
+
+bellman-ford fixes this
+expand all states iteratively O(n^n)
+
+O(V*E) -> O(V^2)
+
+Djikstra->
+
+
+
+Bidirectional search
+
+start search in both directions
+keep track of forward and backward costs
+gF(n)
+gB(b)
+same problem as djikstra
+
+
+A*
+a goal-directed search
+
+g(n) actual cost so far (to n)
+h(n) an estimate from n to goal
+
+f(n) = g(n)+h(n)
+
+
+h(n)
+admissible the heuristic never overestimates
+consistent the triangle inequality is satisfied
+
+unidirectional problem
+
+
+when inconsistent heurisitcs... A* sucks
+equivalent problem to negative edge weifhts in djikstra
+- exponential worst case
+
+Algorithm B fixes worst case
+- N^2
+
+
+bidirectional heurisitc search
+- expand minimym g-cost
+- A* but 2 directions
+
+- doesnt do well
+- possibl that the frontiers dont meet each other
+
+1997 2 explanations
+- frontierrs were going into each other (expand same states in both directions)
+- even when the search meet, the search doesnt terminate
+
+Initial solution, use a consistent herisitc
+- avoid the frontiers crossing, improve heuristic
+
+no bidirectional theoyr
+- algorithm terminating late
+- optimality of algorithm not well defined
+if f(u) < C*-> we must expand u
+- c* is the optimal cost
+
+lb (u, v) = ax(fF(u), fB(u), gF(u)+gB(u))))
+
+
+if lb(u, v) < C* m you only need to expand u or v
+
+Gmx minimum vertex cover poblem....
+
+write hieghest edge between the 2
+
+
+find a meeting point...
+
+
+A* repeatedly expand state with loweest f()n
+NBS: repeated expand pair of states with lowest lb(u, v)
+- may expand the same state in each direction
+- no more than 2x minimal expansions / no algorithm can beat this
+Near-optimal bidirectional search
+
+
+Consistency, hF(u)-hF(v)
+
+
+lb(max ff(u), fb(v), g+g+h)
+
+front to fron alg
+
+
+bidirectional search better than unidirectional search?
+
+A* and IDA*
+IDA, Iterative deepening of A*
+- Budget Graph search, if I dont know, then i jump ahead and do the search, and avoid doing the N^2 work
+- log(n) steps
+
+-IBEX and BGS has O(N log C*)
+
+
+problem - misleading heurisitc causes re-expansions
+vould avoid with djiktra's algorithm
+
+heuristic may prune many states, dont want to discard completely
+
+If we knew the solution cost, we could guide the search by g(n) but prune states that have higher than C*
+Breadthe first Heuristic Search
+
+Estimate using exponential seach, use a budget to control the cost of overestimates
+
+hat is maximum f fully explored with K expansions
+
+
+BUdgeted tree searfch
+
+exponential jumps in cost, to find a middle cost
+
+
+
+
+Weighted A*
+g cost and h cost
+
+ put an h cost, but put a weight on h
+
+ this creates an inconsistent heuristic
+
+ w is an inflation factor that bounds suboptimality.
+
+ Re expansions cause overhead O_O
+
+ weighted A8 can do N^2 or s^n
+
+ Re expansions are optional
+
+ weighted A* is a one line change
+
+
+ find family of algorithms that are one line changes
+
+
+f(n) =  phi(h, g)
+
+
+What are properties of phi that avoid reopening states,
+a bounding function that controls suboptimality
+
+A* : as g increases and h increases, the priority increases
+
+Weighted A*: line goes from B(h) to h and the slope is steeper (higher amounts of sboptimality)
+
+XDP: a parabola, shifts suboptimality from none to more!
+
+
+previous wok didnt deeply analyze the impace of revisits
+rich class of improved priority functions
+can control where suboptimality arises
+
+
+Some open
