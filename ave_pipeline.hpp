@@ -37,7 +37,7 @@ namespace ave{
 
             void bind(VkCommandBuffer commandBuffer);
 
-            static PipelineConfigInfo defaultPipelineConfigInfo(PipelineConfigInfo& configInfo);
+            static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo);
 
         private:
             static std::vector<char> readFile(const std::string& filepath);
