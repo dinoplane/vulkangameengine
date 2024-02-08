@@ -9,10 +9,11 @@ namespace ave {
     void AveWindow::initWindow(){
         glfwInit();
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); // do not init OpenGL context
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // prevent resizing
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // prevent resizing
 
         window = glfwCreateWindow(width, height, windowName.c_str(), nullptr, nullptr);
-
+        glfwSetWindowUserPointer(window, this);
+        glfwSetFramebufferSizeCallback(window, frameBufferResizeCallback);
     };
 
     AveWindow::~AveWindow(){
@@ -26,5 +27,13 @@ namespace ave {
             throw std::runtime_error("Failed to create window surface");
         }
     }
+
+
+    void AveWindow::frameBufferResizeCallback(GLFWwindow *window, int width, int height){
+        auto aveWindow = reinterpret_cast<AveWindow *>(glfwGetWindowUserPointer(window));
+        aveWindow->width = width;
+        aveWindow->height = height;
+    }
+
 
 }

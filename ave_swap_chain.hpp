@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+#include<memory>
+
 namespace ave {
 
 class AveSwapChain {
@@ -16,10 +18,11 @@ class AveSwapChain {
   static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
   AveSwapChain(AveDevice &deviceRef, VkExtent2D windowExtent);
+  AveSwapChain(AveDevice &deviceRef, VkExtent2D windowExtent, std::shared_ptr<AveSwapChain> previous);
   ~AveSwapChain();
 
   AveSwapChain(const AveSwapChain &) = delete;
-  void operator=(const AveSwapChain &) = delete;
+  AveSwapChain& operator=(const AveSwapChain &) = delete;
 
   VkFramebuffer getFrameBuffer(int index) { return swapChainFramebuffers[index]; }
   VkRenderPass getRenderPass() { return renderPass; }
@@ -39,6 +42,7 @@ class AveSwapChain {
   VkResult submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex);
 
  private:
+  void init();
   void createSwapChain();
   void createImageViews();
   void createDepthResources();
@@ -69,6 +73,7 @@ class AveSwapChain {
   VkExtent2D windowExtent;
 
   VkSwapchainKHR swapChain;
+  std::shared_ptr<AveSwapChain> oldSwapchain;
 
   std::vector<VkSemaphore> imageAvailableSemaphores;
   std::vector<VkSemaphore> renderFinishedSemaphores;

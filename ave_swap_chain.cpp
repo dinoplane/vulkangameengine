@@ -13,6 +13,17 @@ namespace ave {
 
 AveSwapChain::AveSwapChain(AveDevice &deviceRef, VkExtent2D extent)
     : device{deviceRef}, windowExtent{extent} {
+  init();
+}
+
+AveSwapChain::AveSwapChain(AveDevice &deviceRef, VkExtent2D extent, std::shared_ptr<AveSwapChain> previous)
+    : device{deviceRef}, windowExtent{extent} , oldSwapchain{previous}{
+  init();
+
+  oldSwapchain = nullptr;
+}
+
+void AveSwapChain::init(){
   createSwapChain();
   createImageViews();
   createRenderPass();
@@ -20,6 +31,7 @@ AveSwapChain::AveSwapChain(AveDevice &deviceRef, VkExtent2D extent)
   createFramebuffers();
   createSyncObjects();
 }
+
 
 AveSwapChain::~AveSwapChain() {
   for (auto imageView : swapChainImageViews) {
@@ -162,7 +174,7 @@ void AveSwapChain::createSwapChain() {
   createInfo.presentMode = presentMode;
   createInfo.clipped = VK_TRUE;
 
-  createInfo.oldSwapchain = VK_NULL_HANDLE;
+  createInfo.oldSwapchain = (oldSwapchain == nullptr) ? VK_NULL_HANDLE : oldSwapchain->swapChain;
 
   if (vkCreateSwapchainKHR(device.device(), &createInfo, nullptr, &swapChain) != VK_SUCCESS) {
     throw std::runtime_error("failed to create swap chain!");

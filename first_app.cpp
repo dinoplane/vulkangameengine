@@ -6,7 +6,7 @@ namespace ave {
     FirstApp::FirstApp(){
         loadModels();
         createPipelineLayout();
-        createPipeline();
+        recreateSwapChain();
         createCommandBuffers();
     };
 
@@ -62,8 +62,12 @@ namespace ave {
     };
 
     void FirstApp::createPipeline(){
-        auto pipelineConfig = AvePipeline::defaultPipelineConfigInfo(aveSwapChain.width(), aveSwapChain.height());
-        pipelineConfig.renderPass = aveSwapChain.getRenderPass();
+        assert(aveSwapChain != nullptr && "Cannot create pipeline before swapchain");
+        assert(pipelineLayout != nullptr && "Cannot create pipeline before layout");
+
+        PipelineConfigInfo pipelineConfig{};
+        AvePipeline::defaultPipelineConfigInfo(pipelineConfig);
+        pipelineConfig.renderPass = aveSwapChain->getRenderPass();
         pipelineConfig.pipelineLayout = pipelineLayout;
         avePipeline = std::make_unique<AvePipeline>(
             aveDevice,
@@ -72,8 +76,31 @@ namespace ave {
             pipelineConfig);
     };
 
+    void FirstApp::recreateSwapChain(){
+        auto extent = aveWindow.getExtent();
+        while (extent.width == 0 || extent.height == 0){
+            extent = aveWindow.getExtent();
+            glfwWaitEvents();
+        }
+
+        vkDeviceWaitIdle(aveDevice.device());
+
+        if (aveSwapChain == nullptr)
+            aveSwapChain = std::make_unique<AveSwapChain>(aveDevice, extent);
+        else {
+            aveSwapChain = std::make_unique<AveSwapChain>(aveDevice, extent, std::move(aveSwapChain));
+            if (aveSwapChain->imageCount() != commandBuffers.size()){
+                freeCommandBuffers();
+                createCommandBuffers();
+            }
+        }
+
+        // If render passes are compatible, then do nothing...(no need to be recreated)
+        createPipeline();
+    }
+
     void FirstApp::createCommandBuffers(){
-        commandBuffers.resize(aveSwapChain.imageCount());
+        commandBuffers.resize(aveSwapChain->imageCount());
 
         VkCommandBufferAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -84,53 +111,92 @@ namespace ave {
         if (vkAllocateCommandBuffers(aveDevice.device(), &allocInfo, commandBuffers.data()) != VK_SUCCESS){
             throw std::runtime_error("failed to allocate command buffers");
         }
-
+        //aveDevice, aveWindow.getExtent()
+        /*
         for (int i = 0; i < commandBuffers.size(); i++){
-            VkCommandBufferBeginInfo beginInfo{};
-            beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
-            if (vkBeginCommandBuffer(commandBuffers[i], &beginInfo) != VK_SUCCESS){
-                throw std::runtime_error("failed to begin recording command buffer!");
-            }
-
-            VkRenderPassBeginInfo renderPassInfo{};
-            renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            renderPassInfo.renderPass = aveSwapChain.getRenderPass();
-            renderPassInfo.framebuffer = aveSwapChain.getFrameBuffer(i);
-            renderPassInfo.renderArea.offset = {0,0};
-            renderPassInfo.renderArea.extent = aveSwapChain.getSwapChainExtent();
-
-            std::array<VkClearValue, 2> clearValues{};
-            clearValues[0].color = {0.1f, 0.1f, 0.1f, 1.0f};
-            clearValues[1].depthStencil = {1.0f, 0};
-            renderPassInfo.clearValueCount = static_cast<u_int32_t>(clearValues.size());
-            renderPassInfo.pClearValues = clearValues.data();
-
-            vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-
-            avePipeline->bind(commandBuffers[i]);
-            aveModel->bind(commandBuffers[i]);
-            aveModel->draw(commandBuffers[i]);
-
-            // vkCmdDraw(commandBuffers[i], 3, 1, 0, 0);// 3 vertices, 1 instance, no offsets
-
-            vkCmdEndRenderPass(commandBuffers[i]);
-            if (vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS){
-                throw std::runtime_error("failed to record command buffer");
-            }
         }
-
+        */
 
     };
 
+    void FirstApp::recordCommandBuffer(int imageIndex){
+        VkCommandBufferBeginInfo beginInfo{};
+        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+
+        if (vkBeginCommandBuffer(commandBuffers[imageIndex], &beginInfo) != VK_SUCCESS){
+            throw std::runtime_error("failed to begin recording command buffer!");
+        }
+
+        VkRenderPassBeginInfo renderPassInfo{};
+        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        renderPassInfo.renderPass = aveSwapChain->getRenderPass();
+        renderPassInfo.framebuffer = aveSwapChain->getFrameBuffer(imageIndex);
+        renderPassInfo.renderArea.offset = {0,0};
+        renderPassInfo.renderArea.extent = aveSwapChain->getSwapChainExtent();
+
+        std::array<VkClearValue, 2> clearValues{};
+        clearValues[0].color = {0.1f, 0.1f, 0.1f, 1.0f};
+        clearValues[1].depthStencil = {1.0f, 0};
+        renderPassInfo.clearValueCount = static_cast<u_int32_t>(clearValues.size());
+        renderPassInfo.pClearValues = clearValues.data();
+
+        vkCmdBeginRenderPass(commandBuffers[imageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+        VkViewport viewport{};
+        viewport.x = 0.0f;
+        viewport.y = 0.0f;
+        viewport.width = static_cast<float>(aveSwapChain->getSwapChainExtent().width);
+        viewport.height = static_cast<float>(aveSwapChain->getSwapChainExtent().height);
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+        VkRect2D scissor{{0, 0}, aveSwapChain->getSwapChainExtent()};
+        vkCmdSetViewport(commandBuffers[imageIndex], 0, 1, &viewport);
+        vkCmdSetScissor(commandBuffers[imageIndex], 0, 1, &scissor);
+
+
+        avePipeline->bind(commandBuffers[imageIndex]);
+        aveModel->bind(commandBuffers[imageIndex]);
+        aveModel->draw(commandBuffers[imageIndex]);
+
+        // vkCmdDraw(commandBuffers[imageIndex], 3, 1, 0, 0);// 3 vertices, 1 instance, no offsets
+
+        vkCmdEndRenderPass(commandBuffers[imageIndex]);
+        if (vkEndCommandBuffer(commandBuffers[imageIndex]) != VK_SUCCESS){
+            throw std::runtime_error("failed to record command buffer");
+        }
+    };
+
+    void FirstApp::freeCommandBuffers(){
+        vkFreeCommandBuffers(
+            aveDevice.device(),
+            aveDevice.getCommandPool(),
+            static_cast<u_int32_t>(commandBuffers.size()),
+            commandBuffers.data());
+        commandBuffers.clear();
+    }
+
     void FirstApp::drawFrame(){
         u_int32_t imageIndex;
-        auto result = aveSwapChain.acquireNextImage(&imageIndex);
+        auto result = aveSwapChain->acquireNextImage(&imageIndex);
+        if (result == VK_ERROR_OUT_OF_DATE_KHR){
+            recreateSwapChain();
+            return;
+        }
+
         if(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR){
             throw std::runtime_error("failed to acquire swap chain image");
         }
 
-        result = aveSwapChain.submitCommandBuffers(&commandBuffers[imageIndex], &imageIndex);
+        recordCommandBuffer(imageIndex);
+        result = aveSwapChain->submitCommandBuffers(&commandBuffers[imageIndex], &imageIndex);
+
+        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || aveWindow.wasWindowResized()){
+            aveWindow.resetWindowResizedFlag();
+            recreateSwapChain();
+            return;
+        }
+
         if (result != VK_SUCCESS){
             throw std::runtime_error("failed to present swap chain image");
         }

@@ -35,9 +35,13 @@ namespace ave {
             void createCommandBuffers();
             void drawFrame();
 
+            void recreateSwapChain();
+            void recordCommandBuffer(int imageIndex);
+            void freeCommandBuffers();
+
             AveWindow aveWindow{WIDTH, HEIGHT, "Hello Vulkan"};
             AveDevice aveDevice{aveWindow};
-            AveSwapChain aveSwapChain{aveDevice, aveWindow.getExtent()};
+            std::unique_ptr<AveSwapChain> aveSwapChain; //{aveDevice, aveWindow.getExtent()};
             std::unique_ptr<AvePipeline> avePipeline;
 
             /*{aveDevice,
