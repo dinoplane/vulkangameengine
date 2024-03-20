@@ -308,3 +308,365 @@ can control where suboptimality arises
 
 
 Some open
+
+
+
+
+VR
+
+- useful for exploing new places, creating artifacts, and education,
+- haptic feed back - feeling textyres ,feeling forces ,facilitating dexteritty
+- in VR, we lose sense of touch
+
+address this
+
+
+goal: feeling textures and forces in VR
+
+implementation useing a safe to touch drone
+
+integrate into virtual reality sysstem
+
+
+many challenges
+- low position accuracy
+    - environment influences the precision
+
+
+different types of haptic
+handheld, wearable, encounter-type
+- all have hardware limitations
+    - accuracy, speed of haptic rendering, resolution (details)
+- dont need to be perfect because perception is imperfect i.e. touch fingers above head
+    - can be leveraged to create an illusion
+
+
+safe to touch drone
+- attached fabrics
+- texture rendering was coresponded to fabrics
+- people instictively touch safe to touch drone
+- in practice, position accuracy is problem, drone drifts away
+
+- using retargeting illusion as a solution
+3 boxes in vr, but only 1 in reality
+
+
+how bain plans and controls movement
+- inten converted to ignals converted to action
+
+
+- offset the virtual hand opposite to what reality is, so the touch is on drone is at angles
+
+visual dominance effect - vision dominates proprioception
+
+
+evaluation revealed failure cases
+- quick movements suck
+- drone shifting directions
+-
+
+tabletop robot, that had different button and knobs,
+- haptics controlled by robot
+- failed when touching buttons far apart in virtual reality
+- touch prediction
+    - try to minimize jerk, the d of accel
+- figure out where the robot could get to in time,
+- predict how close the robot could get
+- pick and choose when to use dynamic retargeting and
+
+
+resolution
+contour  following tasks
+- shape have limited resolution
+- use angle redirection to solve the rasterization problem
+- redirect finger to use a horizontal or vertical land
+- trace easily
+- so what angle do people suspect?
+at 49.5 degrees, people are sure, at 35 degrees, not sure
+
+evaluating performance for angle redirection
+- asking if the shape dsiplay was high or low res
+- illusion was preferred most of the time (at 40 degrees)
+
+scaling up for improved resolution
+- scaling the resolution of the shape dsiplay
+- control to display ratio
+- smoother surface, and more details
+
+
+- constant stimuli test
+detection threshold was 1.9 times definitely, 1.63 is unsure
+
+- at 1.8, illusion was preferred most of the time
+smaller scale factor, worse results
+
+leverage the adaptability of humans
+remap users movements into VR
+
+
+spectrum of verity
+
+reality -> illusory -> beyond real interactions
+
+locomotion
+- amplifying motion, 10x as a giant or 10x speed.
+- giant accuacy was good
+- spped was more motion sick...
+
+
+VR intercepts the sensory apparatus
+- vision is being intercepted by what we areing from head set
+
+discrrepancy sall so visual dominance
+
+
+beyond real creates a transfomration between senses and what is being rendered
+cant resolve discrepancy, but can adapt to it
+
+
+outlines
+
+Open Chalenfes and future work in V
+Desiging usable interactions
+- building preductuve tools
+- simulating alternatives
+
+Considering individual differences
+- Capturing user vehavios
+- adapting to individual users
+
+
+in sity intelligence augmentation
+
+adaptie interfaces minimal timely, sensory modality
+input on the go
+uncertainty
+disampibudfiub pravacy reserving
+
+interactions w/ situated AI
+IoT
+
+
+Leveling up Next Gen Xbox User Experience with Nerural Nets and Sound
+
+
+Xbox has lots of tuff from consoles, games, to online subscripton
+
+
+Lots of technoloy suuch as kinect sptail audio and ai techniques for better UX
+
+console gaming
+ai powered wireless transmissions for better user experience
+
+
+game engine infinite loop evolving game state continuously
+
+game inputs that are digial or analogue
+
+feedback
+    haptic like audio or rumble
+
+audio and video steams and frames at refresh rate
+
+
+manhy different ways xbox connects
+    wireless and fully connected
+
+
+
+    play anywayere with any device and people connect in all sort of ways with cloud gaming
+
+    only cloud and control large varaibility
+    many ways people connect to cloud
+
+
+dont need to tangle self in wires
+
+
+comp gamers dont like wireless to avoid packet losses despite wires being tangling
+
+
+Data rates in wifi
+each data rate needs a certain minimum snr
+
+
+lower data rates atake more time and waste time and energy
+
+save power vs packet loss
+
+
+wifi used ofdm
+
+20 mhs channels divided into narrow sub carriers
+
+groups of bits are sent through eah subcarriers
+ifmany sub carriers are poor we have packet losses
+
+
+how bad can this get with average gamer distance fromm console antenna
+
+
+during active game play
+
+wire less channel changes rapidly and losses increase significantly
+
+during active gameplay
+
+up to 10-15dB chanfges within 50-80ms
+
+adaptive data rate cannot keep p
+
+siring acitve game play prior user studies assume uncorrelated losses
+
+consecutive losses are common
+
+
+audio glitches are distracting
+
+xbox transmits PCM audio in 8ms chunks each loss introduces a discontinuity
+
+
+its possible to hear 1% loss
+
+joystick does not respond well
+packeet losses create discontinuities
+can topple a car at high speed
+
+audio exp is expereienved
+
+controllers are battery powered 200-400MHz ARM processors
+
+Xbox controllers suty controllers
+
+
+first thoughts
+2 decades, use previous ML techniques ()some might be bad
+
+
+
+we should use RL
+
+and learn a policy that determines data rate based on recent history of channel of measurement
+
+needs to be continuous and online robust and a fast learner
+
+each time the console transmits a packet measure the cSi and snr of eireless channel in reverse direction and record xduscces
+
+learna a rate selction policy base don data
+ reverse and foward channels
+ measurements are not the same
+
+ tc power diff agc diffs devices h/w
+
+
+ ANNs can lear online to model mwireless channels
+
+ wireless channel changes are hard to characterize analytically latent effects
+ depend on the game, gamers motions e.w
+
+ we can use neural nets to learn and model these effects !
+
+
+
+proximal polixy optimization
+
+ises 2 neural nets
+
+and first attempt were heavy and time consumeing despite acciracy
+
+
+map to computed snt
+key insidt 1 using wireless omain knowledge cansignigicant learning relive burden from the ANN
+
+applu wll known wired results
+key insidt 2 use an ANN to learn to map the wireless channel into a wired channel an then make use of standard results
+
+
+a contectual multi armed banit to explore vs exploit
+
+
+learning needs ot be lnline and conitinuous
+
+interfere changes env changes game dynamics change
+
+
+the regular cadence in gaming communication ot be stable
+
+suppose that the instananeous packet success rate a t MCSk is p_k
+to train a regression model we have atarget
+
+then the network should have preicted PSRk
+
+but we dont have the suscess rate so how do we train it
+
+instead use instaneous mesuared sample of p_k
+
+prove that
+
+
+ipmortant part of adr x awas input feature engineer based on domain knowledge
+
+reduce ANN size to reduce compute costs
+imporove converence time
+
+
+intially when the net is lerning bad actions can be taken
+
+survivorship bias pakcets lost csI measurements lost
+
+imp
+
+fuard rails default conservative strat
+
+
+100x lower comoute cost
+
+
+
+real time convergence
+- randome init takes about a minute
+- takes 10-15
+
+
+
+tale of two streams
+
+sctreen stream accesory stream
+
+chat chat stream
+
+both stream are kept on
+
+famer hears 2 audio game streasms at a time
+
+echo problem because of game audio is heard via the mic due to the server to ear latency for these two paths are diff
+
+40-50 ms of gap between the two streams
+
+sometimes the streams go through differen paths
+
+no control over som endpoints hinfers measurements
+
+RTT incurrrs erorr
+
+
+correlate over heard sound from the screen and one received at the headphones to estimate the interstream delay
+
+server embeds inaudible acoustic PN seq in the game audio
+the headphone controller time stamps sample numbers and convus them to serrvcer
+the micorphone at the headset recods the overheadd sound from the screen inclusinng the embedded pn sequences
+
+serve estimates delay diff by corelating the PN sequences
+
+
+
+ekho desings an extremely robust scheme
+
+screen speakeres distoert over heard game audio
+
+pn sequences embeededding fgame audio that are already designed to inaudble
+
+bleh
+
+PN = pseudo noise
+

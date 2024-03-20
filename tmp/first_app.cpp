@@ -1,8 +1,8 @@
 #include "first_app.hpp"
 
-// #define GLM_FORCE_RADIANS
-// #define GLM_FORCE_DEPTH_ZERO_TO_ONE
-// #include "glm/glm.hpp"
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#include "glm/glm.hpp"
 
 #include <array>
 #include <cassert>
@@ -10,10 +10,11 @@
 
 namespace ave {
 
-    // struct SimplePushConstantData {
-    //     glm::vec2 offset;
-    //     glm::vec3 color;
-    // };
+    struct SimplePushConstantData {
+        // glm::vec2 offset; // needs to be aligned 2*vec2
+        glm::vec3 color;
+        alignas(16) glm::mat2 model;
+    };
 
     FirstApp::FirstApp(){
         loadModels();
@@ -52,28 +53,32 @@ namespace ave {
 
     void FirstApp::loadModels(){
         std::vector<AveModel::Vertex> vertices;
-        FirstApp::triforce(vertices,
-            {{0.0f, -1.0f}, {1.0, 0.0, 1.0}},
-            {{1.0f, 1.0f}, {1.0, 1.0, 0.0}},
-            {{-1.0f, 1.0f}, {0.0, 1.0, 1.0}},
-            7);
+        // FirstApp::triforce(vertices,
+        //     {{0.0f, -1.0f}, {1.0, 0.0, 1.0}},
+        //     {{1.0f, 1.0f}, {1.0, 1.0, 0.0}},
+        //     {{-1.0f, 1.0f}, {0.0, 1.0, 1.0}},
+        //     7);
+        vertices.insert(vertices.end(), {{{0.0f, -0.5f}, {0.5, 0.0, 0.5}},
+            {{0.5f, 0.5f}, {0.5, 0.5, 0.0}},
+            {{-0.5f, 0.5f}, {0.0, 0.5, 0.5}}});
 
         aveModel = std::make_unique<AveModel>(aveDevice, vertices);
+
     };
 
     void FirstApp::createPipelineLayout(){
 
-        // VkPushConstantRange pushConstantRange{};
-        // pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
-        // pushConstantRange.offset = 0; // Using same range for vertex and fragment shaders.
-        // pushConstantRange.size = sizeof(SimplePushConstantData);
+        VkPushConstantRange pushConstantRange{};
+        pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+        pushConstantRange.offset = 0; // Using same range for vertex and fragment shaders.
+        pushConstantRange.size = sizeof(SimplePushConstantData);
 
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
         pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
         pipelineLayoutInfo.setLayoutCount = 0;
         pipelineLayoutInfo.pSetLayouts = nullptr;
-        pipelineLayoutInfo.pushConstantRangeCount =  0; //1;
-        pipelineLayoutInfo.pPushConstantRanges = nullptr; //&pushConstantRange;
+        pipelineLayoutInfo.pushConstantRangeCount =  1;
+        pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
         if (vkCreatePipelineLayout(aveDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS){
             throw std::runtime_error("failed to create pipeline layout");
         }
@@ -139,6 +144,10 @@ namespace ave {
     };
 
     void FirstApp::recordCommandBuffer(int imageIndex){
+        static float frame = 0.0f;
+        frame = (frame + 0.0005);
+
+
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
@@ -177,13 +186,26 @@ namespace ave {
         aveModel->bind(commandBuffers[imageIndex]);
 
         // // Seet push constant
-        // for (int i = 0; i < 4; i++){
+        const int LAYERS = 7;
+        for (int j = 1; j < LAYERS; j++){
+            SimplePushConstantData push{};
+            // push.offset = {-0.5 + sin(frame), -0.4f + j * 0.25f };
+            float x = frame*j;
+            push.model = glm::mat2(glm::vec2(cos(x), -sin(x)),
+                                    glm::vec2(sin(x), cos(x)));
 
-        // }
+            push.color = {0.0f, 0.0f, 1.0f-glm::mix(0.0, 1.0, j/static_cast<float>(LAYERS))};
+
+            vkCmdPushConstants(commandBuffers[imageIndex],
+            pipelineLayout,
+            VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+            0, sizeof(SimplePushConstantData), &push);
+                    aveModel->draw(commandBuffers[imageIndex]);
+
+        };
 
 
 
-        aveModel->draw(commandBuffers[imageIndex]);
 
         // vkCmdDraw(commandBuffers[imageIndex], 3, 1, 0, 0);// 3 vertices, 1 instance, no offsets
 
