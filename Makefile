@@ -15,8 +15,8 @@ $(TARGET): $(vertObjFiles) $(fragObjFiles)
 # $(TARGET): *.cpp *.hpp
 # 	g++ $(CFLAGS) -o $(TARGET) *.cpp $(LDFLAGS)
 
-$(TARGET): main.cpp ave_window.cpp ave_window.hpp
-	g++ $(CFLAGS) -o $(TARGET) main.cpp ave_window.cpp ave_window.hpp $(LDFLAGS)
+$(TARGET): main.cpp ave_window.cpp ave_window.hpp ave_device.cpp ave_device.hpp
+	g++ $(CFLAGS) -o $(TARGET) main.cpp ave_window.cpp ave_window.hpp ave_device.cpp ave_device.hpp $(LDFLAGS)
 
 %.spv: %
 	${GLSLC} $< -o $@
