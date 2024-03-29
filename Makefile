@@ -13,10 +13,10 @@ TARGET = VulkanGameEngine
 $(TARGET): $(vertObjFiles) $(fragObjFiles)
 
 # $(TARGET): *.cpp *.hpp
-#	g++ $(CFLAGS) -o $(TARGET) *.cpp $(LDFLAGS)
+# 	g++ $(CFLAGS) -o $(TARGET) *.cpp $(LDFLAGS)
 
-$(TARGET): main.cpp
-	g++ $(CFLAGS) -o $(TARGET) main.cpp $(LDFLAGS)
+$(TARGET): main.cpp ave_window.cpp ave_window.hpp
+	g++ $(CFLAGS) -o $(TARGET) main.cpp ave_window.cpp ave_window.hpp $(LDFLAGS)
 
 %.spv: %
 	${GLSLC} $< -o $@

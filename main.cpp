@@ -1,7 +1,6 @@
 #include <vulkan/vulkan.h>
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
+#include "ave_window.hpp"
 
 #include <algorithm>
 #include <iostream>
@@ -14,6 +13,9 @@
 #include <cstdint> // Necessary for uint32_t
 #include <limits> // Necessary for std::numeric_limits
 #include <fstream>
+
+
+
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -36,6 +38,8 @@ const int MAX_FRAMES_IN_FLIGHT = 2;
 // #endif
 const bool enableValidationLayers = false;
 
+
+
 // Gets the createDebugUtils function because it isnt loaded automatically
 VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
     auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
@@ -55,6 +59,7 @@ void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT
 }
 
 
+namespace ave {
 
 struct QueueFamilyIndices {
     std::optional<uint32_t> graphicsFamily;
@@ -71,15 +76,20 @@ struct SwapChainSupportDetails {
     std::vector<VkPresentModeKHR> presentModes;
 };
 
+
+
 class HelloTriangleApplication {
 public:
+    static constexpr int WIDTH = 800;
+    static constexpr int HEIGHT = 600;
     int num;
 
 private:
     VkQueue graphicsQueue;
     VkQueue presentQueue;
 
-    GLFWwindow* window;
+    // GLFWwindow* window;
+    AveWindow window{WIDTH, HEIGHT, "Hello Vulkan"};
     VkSurfaceKHR surface;
     VkInstance instance;
     VkDebugUtilsMessengerEXT debugMessenger;
@@ -111,30 +121,33 @@ private:
 
     uint32_t currentFrame = 0;
 
-
 public:
+    HelloTriangleApplication(){
+
+    }
+
     void run() {
-        initWindow();
+        // initWindow();
         initVulkan();
         mainLoop();
         cleanup();
     }
 
 private:
-    void initWindow() {
-        glfwInit();
+    // void initWindow() {
+    //     glfwInit();
 
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        // glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-        window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
-        glfwSetWindowUserPointer(window, this);
-        glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
-    }
+    //     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    //     // glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    //     window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
+    //     glfwSetWindowUserPointer(window, this);
+    //     glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
+    // }
 
-    static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
-        auto app = reinterpret_cast<HelloTriangleApplication*>(glfwGetWindowUserPointer(window));
-        app->framebufferResized = true;
-    }
+    // static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
+    //     auto app = reinterpret_cast<HelloTriangleApplication*>(glfwGetWindowUserPointer(window));
+    //     app->framebufferResized = true;
+    // }
 
     static std::vector<char> readFile(const std::string& filename) {
         std::ifstream file(filename, std::ios::ate | std::ios::binary);
@@ -217,7 +230,6 @@ private:
         return availableFormats[0];
     }
 
-
     // Conditions for showing images to the screen
     // IMMEDIATE: images submitted by app are transferred to screen right away
     // FIFO: images are queued and displayed in order. If queue is full, app has to wait (V-sync). vertical blank: when display is refreshed
@@ -240,7 +252,7 @@ private:
             return capabilities.currentExtent;
         } else {
             int width, height;
-            glfwGetFramebufferSize(window, &width, &height);
+            window.getFramebufferSize(&width, &height);
 
             VkExtent2D actualExtent = {
                 static_cast<uint32_t>(width),
@@ -254,10 +266,8 @@ private:
         }
     }
 
-
     void initVulkan() {
         createInstance();
-
         setupDebugMessenger();
         createSurface();
         pickPhysicalDevice();
@@ -297,11 +307,10 @@ private:
         vkDestroySurfaceKHR(instance, surface, nullptr);
         vkDestroyInstance(instance, nullptr);
 
-        glfwDestroyWindow(window);
+        // glfwDestroyWindow(window);
 
-        glfwTerminate();
+        // glfwTerminate();
     }
-
 
     void createSyncObjects() {
         imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
@@ -375,7 +384,6 @@ private:
         }
     }
 
-
     void createCommandBuffers() {
         commandBuffers.resize(MAX_FRAMES_IN_FLIGHT);
         VkCommandBufferAllocateInfo allocInfo{};
@@ -389,7 +397,6 @@ private:
         }
 
     }
-
 
     void createCommandPool() {
         QueueFamilyIndices queueFamilyIndices = findQueueFamilies(physicalDevice);
@@ -480,7 +487,6 @@ private:
         }
 
     }
-
 
     void createGraphicsPipeline() {
 
@@ -768,11 +774,11 @@ private:
     }
 
     void createSurface() {
-        if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create window surface!");
-        }
+        window.createWindowSurface(instance, &surface);
+        // if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS) {
+        //     throw std::runtime_error("failed to create window surface!");
+        // }
     }
-
 
     std::vector<const char*> getRequiredExtensions() {
         // get glfw extensions
@@ -964,7 +970,6 @@ private:
         }
     }
 
-
     QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) {
         QueueFamilyIndices indices;
         // Logic to find queue family indices to populate struct with
@@ -1049,15 +1054,13 @@ private:
     }
 
     void mainLoop() {
-        while (!glfwWindowShouldClose(window)) {
+        while (!window.shouldClose()) {
             glfwPollEvents();
             drawFrame();
         }
         vkDeviceWaitIdle(device);
 
     }
-
-
 
     void cleanupSwapChain() {
         for (size_t i = 0; i < swapChainFramebuffers.size(); i++) {
@@ -1073,9 +1076,11 @@ private:
 
     void recreateSwapChain() {
         int width = 0, height = 0;
-        glfwGetFramebufferSize(window, &width, &height);
+        // glfwGetFramebufferSize(window, &width, &height);
+        window.getFramebufferSize(&width, &height);
         while (width == 0 || height == 0) {
-            glfwGetFramebufferSize(window, &width, &height);
+            window.getFramebufferSize(&width, &height);
+            // glfwGetFramebufferSize(window, &width, &height);
             glfwWaitEvents();
         }
 
@@ -1086,8 +1091,7 @@ private:
         createFramebuffers();
     }
 
-
-void drawFrame() {
+    void drawFrame() {
         vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
         uint32_t imageIndex;
@@ -1150,8 +1154,10 @@ void drawFrame() {
     }
 };
 
+}
+
 int main() {
-    HelloTriangleApplication app;
+    ave::HelloTriangleApplication app;
 
     try {
         app.run();
@@ -1162,3 +1168,4 @@ int main() {
 
     return EXIT_SUCCESS;
 }
+
