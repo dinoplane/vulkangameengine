@@ -201,6 +201,8 @@ namespace ave{
 
         if (vkCreateDevice(physicalDevice, &createInfo, nullptr, &device_) != VK_SUCCESS) {
             throw std::runtime_error("failed to create logical device!");
+        } else {
+            std::cout << "Successfully created logical device" << std::endl;
         }
 
 
