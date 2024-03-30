@@ -1,9 +1,11 @@
 #include <vulkan/vulkan.h>
+#include <glm/glm.hpp>
 
 #include "ave_window.hpp"
 #include "ave_device.hpp"
 #include "ave_pipeline.hpp"
 #include "ave_swapchain.hpp"
+#include "ave_model.hpp"
 
 
 #include <algorithm>
@@ -20,11 +22,16 @@
 
 #include <memory>
 #include <cassert>
-
+#include <array>
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
 namespace ave {
+
+
+
+
+
 
 class HelloTriangleApplication {
 public:
@@ -42,8 +49,11 @@ private:
 
     std::vector<VkCommandBuffer> commandBuffers;
 
+    std::unique_ptr<AveModel> aveModel;
+
 public:
     HelloTriangleApplication(){
+        loadModels();
         createPipelineLayout();
         recreateSwapChain();
         createCommandBuffers();
@@ -60,6 +70,27 @@ public:
     }
 
 private:
+    void loadModels(){
+        // const std::vector<Vertex> vertices = {
+        //     {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+        //     {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+        //     {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+        // };
+
+        std::vector<Vertex> vertices;
+        // FirstApp::triforce(vertices,
+        //     {{0.0f, -1.0f}, {1.0, 0.0, 1.0}},
+        //     {{1.0f, 1.0f}, {1.0, 1.0, 0.0}},
+        //     {{-1.0f, 1.0f}, {0.0, 1.0, 1.0}},
+        //     7);
+        vertices.insert(vertices.end(),
+            {{{0.0f, -0.5f}, {0.5, 0.0, 0.5}},
+            {{0.5f, 0.5f}, {0.5, 0.5, 0.0}},
+            {{-0.5f, 0.5f}, {0.0, 0.5, 0.5}}});
+
+        aveModel = std::make_unique<AveModel>(aveDevice, vertices);
+    }
+
     void createPipelineLayout(){
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
         pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -166,6 +197,7 @@ private:
         vkCmdBeginRenderPass(commandBuffers[imageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
         // vkCmdBindPipeline(commandBuffers[imageIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
         avePipeline->bind(commandBuffers[imageIndex]);
+        aveModel->bind(commandBuffers[imageIndex]);
 
         VkViewport viewport{};
         viewport.x = 0.0f;
@@ -181,7 +213,9 @@ private:
         scissor.extent = aveSwapChain->getSwapChainExtent();
         vkCmdSetScissor(commandBuffers[imageIndex], 0, 1, &scissor);
 
-        vkCmdDraw(commandBuffers[imageIndex], 3, 1, 0, 0);
+        // vkCmdDraw(commandBuffers[imageIndex], 3, 1, 0, 0);
+        aveModel->draw(commandBuffers[imageIndex]);
+
 
         vkCmdEndRenderPass(commandBuffers[imageIndex]);
 
