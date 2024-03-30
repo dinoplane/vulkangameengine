@@ -467,7 +467,7 @@ namespace ave{
         submitInfo.pCommandBuffers = &commandBuffer;
 
         vkQueueSubmit(graphicsQueue_, 1, &submitInfo, VK_NULL_HANDLE);
-        vkQueueWaitIdle(graphicsQueue_);
+        vkQueueWaitIdle(graphicsQueue_); // may instead use fences
 
         vkFreeCommandBuffers(device_, commandPool, 1, &commandBuffer);
     }

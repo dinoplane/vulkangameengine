@@ -15,20 +15,37 @@ namespace ave {
         assert(vertexCount >= 3 && "Vertex Count must be greater than 3");
         VkDeviceSize bufferSize = sizeof(vertices[0]) * vertexCount;
 
+        VkBuffer stagingBuffer;
+        VkDeviceMemory stagingBufferMemory;
         aveDevice.createBuffer(
             bufferSize,
-            VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+            VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+            stagingBuffer,
+            stagingBufferMemory);
+
+
+
+
+        void* data;
+
+        vkMapMemory(aveDevice.device(), stagingBufferMemory, 0, bufferSize, 0, &data);
+
+        memcpy(data, vertices.data(), static_cast<size_t>(bufferSize));
+        vkUnmapMemory(aveDevice.device(), stagingBufferMemory);
+
+        aveDevice.createBuffer(
+            bufferSize,
+            VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
             vertexBuffer,
             vertexBufferMemory
         );
 
-        void* data;
+        aveDevice.copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
 
-        vkMapMemory(aveDevice.device(), vertexBufferMemory, 0, bufferSize, 0, &data);
-
-        memcpy(data, vertices.data(), static_cast<size_t>(bufferSize));
-        vkUnmapMemory(aveDevice.device(), vertexBufferMemory);
+        vkDestroyBuffer(aveDevice.device(), stagingBuffer, nullptr);
+        vkFreeMemory(aveDevice.device(), stagingBufferMemory, nullptr);
     }
 
     void AveModel::draw(VkCommandBuffer commandBuffer){
