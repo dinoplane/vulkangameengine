@@ -6,8 +6,8 @@ namespace ave {
     }
 
     AvePipeline::~AvePipeline(){
-        // vkDestroyShaderModule(aveDevice.device(), vertShaderModule, nullptr);
-        // vkDestroyShaderModule(aveDevice.device(), fragShaderModule, nullptr);
+        vkDestroyShaderModule(aveDevice.device(), vertShaderModule, nullptr);
+        vkDestroyShaderModule(aveDevice.device(), fragShaderModule, nullptr);
         vkDestroyPipeline(aveDevice.device(), graphicsPipeline, nullptr);
     }
 
@@ -173,9 +173,9 @@ namespace ave {
         auto vertShaderCode = readFile("shaders/shader.vert.spv");
         auto fragShaderCode = readFile("shaders/shader.frag.spv");
 
-        VkShaderModule vertShaderModule;
+        // VkShaderModule vertShaderModule;
         createShaderModule(vertShaderCode, &vertShaderModule);
-        VkShaderModule fragShaderModule;
+        // VkShaderModule fragShaderModule;
         createShaderModule(fragShaderCode, & fragShaderModule);
 
         VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
@@ -230,8 +230,8 @@ namespace ave {
             throw std::runtime_error("failed to create graphics pipeline!");
         }
 
-        vkDestroyShaderModule(aveDevice.device(), fragShaderModule, nullptr);
-        vkDestroyShaderModule(aveDevice.device(), vertShaderModule, nullptr);
+        // vkDestroyShaderModule(aveDevice.device(), fragShaderModule, nullptr);
+        // vkDestroyShaderModule(aveDevice.device(), vertShaderModule, nullptr);
 
     }
 

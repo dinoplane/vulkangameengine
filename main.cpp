@@ -191,10 +191,7 @@ private:
     }
 
 
-    void mainLoop() {
 
-
-    }
 
     void drawFrame() {
         u_int32_t imageIndex;
