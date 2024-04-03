@@ -3,6 +3,8 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
+#include "ave_constants.h"
+
 #include "ave_window.hpp"
 #include <string>
 #include <vector>
@@ -59,6 +61,7 @@ namespace ave {
             VkDebugUtilsMessengerEXT debugMessenger;
             VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
             VkCommandPool commandPool;
+            VkDescriptorPool descriptorPool;
 
             VkDevice device_; // logical device
             VkSurfaceKHR surface_;
@@ -75,6 +78,7 @@ namespace ave {
             AveDevice &operator=(AveDevice &&) = delete;
 
             VkCommandPool getCommandPool() { return commandPool; }
+            VkDescriptorPool getDescriptorPool() { return descriptorPool; }
             VkDevice device() { return device_; }
             VkSurfaceKHR surface() { return surface_; }
             VkQueue graphicsQueue() { return graphicsQueue_; }
@@ -112,6 +116,7 @@ namespace ave {
             void pickPhysicalDevice();
             void createLogicalDevice();
             void createCommandPool();
+            void createDescriptorPool();
 
             // helper functions
             bool checkValidationLayerSupport();

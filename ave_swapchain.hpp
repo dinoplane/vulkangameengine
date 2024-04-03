@@ -1,9 +1,10 @@
 #pragma once
 
-#include "ave_device.hpp"
-
 // vulkan headers
 #include <vulkan/vulkan.h>
+
+#include "ave_constants.h"
+#include "ave_device.hpp"
 
 // std lib headers
 #include <string>
@@ -15,10 +16,9 @@
 #include <algorithm>
 
 namespace ave {
-
 class AveSwapChain {
  public:
-  static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
+
 
   AveSwapChain(AveDevice &deviceRef, VkExtent2D windowExtent);
   AveSwapChain(AveDevice &deviceRef, VkExtent2D windowExtent, std::shared_ptr<AveSwapChain> previous);
@@ -33,6 +33,9 @@ class AveSwapChain {
   size_t imageCount() { return swapChainImages.size(); }
   VkFormat getSwapChainImageFormat() { return swapChainImageFormat; }
   VkExtent2D getSwapChainExtent() { return swapChainExtent; }
+  size_t getCurrentFrame() { return currentFrame; }
+
+
   uint32_t width() { return swapChainExtent.width; }
   uint32_t height() { return swapChainExtent.height; }
 

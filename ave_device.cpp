@@ -30,9 +30,11 @@ namespace ave{
         pickPhysicalDevice();
         createLogicalDevice();
         createCommandPool();
+        createDescriptorPool();
     }
 
     AveDevice::~AveDevice(){
+        vkDestroyDescriptorPool(device_, descriptorPool, nullptr);
         vkDestroyCommandPool(device_, commandPool, nullptr);
 
         vkDestroyDevice(device_, nullptr);
@@ -224,6 +226,25 @@ namespace ave{
         }
 
     }
+
+    void AveDevice::createDescriptorPool(){
+        VkDescriptorPoolSize poolSize{};
+        poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        poolSize.descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+
+        VkDescriptorPoolCreateInfo poolInfo{};
+        poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+        poolInfo.poolSizeCount = 1;
+        poolInfo.pPoolSizes = &poolSize;
+
+        poolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+
+
+        if (vkCreateDescriptorPool(device_, &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
+            throw std::runtime_error("failed to create descriptor pool!");
+        }
+    }
+
 
     bool AveDevice::checkValidationLayerSupport() {
         uint32_t layerCount;

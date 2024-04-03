@@ -15,7 +15,7 @@ namespace ave {
 
 class AveSwapChain {
  public:
-  static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
+  static constexpr int MAX_FRAMES_IN_FLIGHT = 2; // make all consts in to a header file later
 
   AveSwapChain(AveDevice &deviceRef, VkExtent2D windowExtent);
   AveSwapChain(AveDevice &deviceRef, VkExtent2D windowExtent, std::shared_ptr<AveSwapChain> previous);

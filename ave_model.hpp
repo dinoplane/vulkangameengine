@@ -3,7 +3,9 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
+#include "ave_constants.h"
 #include "ave_device.hpp"
 
 #define GLM_FORCE_RADIANS
@@ -14,6 +16,7 @@
 #include <cassert>
 #include <cstring>
 
+#include <chrono>
 
 namespace ave {
     struct Vertex {
@@ -57,24 +60,45 @@ namespace ave {
         }
     };
 
+    struct UniformBufferObject {
+        glm::mat4 model;
+        glm::mat4 view;
+        glm::mat4 proj;
+    };
+
+
     class AveModel {
         public:
-            AveModel(AveDevice& device, const std::vector<Vertex> &vertices);
+            AveModel(AveDevice& device, const std::vector<Vertex> &vertices, const std::vector<u_int16_t> &indices);
             ~AveModel();
 
             AveModel(const AveModel&) = delete;
             AveModel& operator=(const AveModel&) = delete;
 
             void bind(VkCommandBuffer commandBuffer);
+            void updateUniformBuffer(uint32_t currentImage, VkExtent2D swapChainExtent);
             void draw(VkCommandBuffer commandBuffer);
+
+            VkBuffer& getUniformBuffer(size_t i) { return uniformBuffers[i]; }
 
         private:
             void createVertexBuffers(const std::vector<Vertex> &vertices);
-
+            void createIndexBuffer(const std::vector<u_int16_t>& indices);
+            void createUniformBuffers();
             AveDevice& aveDevice;
             VkBuffer vertexBuffer;
             VkDeviceMemory vertexBufferMemory;
             uint32_t vertexCount;
+
+            VkBuffer indexBuffer;
+            VkDeviceMemory indexBufferMemory;
+            u_int32_t indexCount;
+
+            std::vector<VkBuffer> uniformBuffers;
+            std::vector<VkDeviceMemory> uniformBuffersMemory;
+            std::vector<void*> uniformBuffersMapped;
+
+
     };
 
 }

@@ -1,0 +1,121 @@
+a9Invetigate the role that Alife concepts can play in advanced models fo graphics
+
+New models that realistically emulate a broad variety of living things
+
+plants to animals lower animals to humans
+
+New graphics algorithms inspired by biological processes
+
+
+
+What is life
+
+Aristotle
+    living things have a "soul"
+    properties of life
+    Birth Consumption of energy/nourishment
+    Growth
+    Reproduction
+    Death
+
+Darwin
+    Evolution (still up to debate)
+
+Watson & Crick
+    DNA as the basis of Evolution i.e. genetic info -> gene expression
+
+What does it mean to be alive?
+
+Life is a pattern in space-time, rather than a specific material object
+
+Self-reproduction
+
+Information storage of a self-representation
+
+A metabolism
+
+Functional interactions with the environment
+
+The ability to evolve
+
+
+
+Artificial Life
+
+John Von Neumann
+    The father of artificial Life
+    Life and automata theory
+    Reproduction - transfer of info
+
+John Conway
+    Cellular automata "The game of life"
+
+Christopher Langton
+    Langton loops automata
+    Organized first conference on Artificial Life
+
+Typically Alife models inhait virtual worlds and are subject to physical laws
+
+More significantly they must also simulate many natural processes of living systems
+
+
+Biomechanics, Locomotion, Perception, Behavior, Learning, Cognition
+
+
+Challenge
+
+Develop sophisticated new graphics models that are
+
+self-creating
+self-developing
+self-evolving
+self-controlling
+self-animating
+
+
+
+ACROSS HEAVEN AND EARTH, I ALONE AM THE EXCEPTION
+
+<!--
+
+-----   -----
+|  O|   |  O|
+ ---     ---
+      ^
+
+-->
+
+
+Cinematic Computer Animation
+
+But graphical characters are neither autonomous nor intellligent
+
+From physics to intelligence
+              / \
+             /   \
+            /     \
+           /       \
+          /         \
+         / Cognition \
+        /-------------\
+       /   Learning    \
+      /-----------------\
+     /     Behavior      \
+    /---------------------\
+   /      Perception       \
+  /-------------------------\
+ / Biomechanics / Locomotion \
+/_____________________________\
+
+
+
+Artificial Life approach to studying living systems
+
+Biological info processing
+
+perception
+learning
+cognition
+
+
+
