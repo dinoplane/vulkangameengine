@@ -8,6 +8,7 @@
 #include "ave_window.hpp"
 #include <string>
 #include <vector>
+#include <array>
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
@@ -68,6 +69,10 @@ namespace ave {
             VkQueue graphicsQueue_;
             VkQueue presentQueue_;
 
+            VkImage depthImage;
+            VkDeviceMemory depthImageMemory;
+            VkImageView depthImageView;
+
         public:
             AveDevice(AveWindow& window);
             ~AveDevice();
@@ -80,16 +85,21 @@ namespace ave {
             VkCommandPool getCommandPool() { return commandPool; }
             VkDescriptorPool getDescriptorPool() { return descriptorPool; }
             VkDevice device() { return device_; }
+            VkPhysicalDevice getPhysicalDevice() { return physicalDevice; }
             VkSurfaceKHR surface() { return surface_; }
             VkQueue graphicsQueue() { return graphicsQueue_; }
             VkQueue presentQueue() { return presentQueue_; }
+
+            bool hasStencilComponent(VkFormat format) {
+                return format == VK_FORMAT_D32_SFLOAT_S8_UINT || format == VK_FORMAT_D24_UNORM_S8_UINT;
+            }
 
             SwapChainSupportDetails getSwapChainSupport() { return querySwapChainSupport(physicalDevice); }
             uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
             QueueFamilyIndices findPhysicalQueueFamilies() { return findQueueFamilies(physicalDevice); }
             VkFormat findSupportedFormat(
                 const std::vector<VkFormat> &candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
-
+            VkFormat findDepthFormat();
             // Buffer Helper Functions
             void createBuffer(
                 VkDeviceSize size,
@@ -102,7 +112,7 @@ namespace ave {
             void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
             void copyBufferToImage(
                 VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount);
-
+            void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
             void createImageWithInfo(
                 const VkImageCreateInfo &imageInfo,
                 VkMemoryPropertyFlags properties,
@@ -116,6 +126,7 @@ namespace ave {
             void pickPhysicalDevice();
             void createLogicalDevice();
             void createCommandPool();
+            void createDepthResources();
             void createDescriptorPool();
 
             // helper functions

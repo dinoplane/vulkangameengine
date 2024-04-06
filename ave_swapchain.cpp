@@ -184,15 +184,13 @@ namespace ave {
 
     }
 
-    void AveSwapChain::createImageViews() {
-        swapChainImageViews.resize(swapChainImages.size());
-        for (size_t i = 0; i < swapChainImages.size(); i++) {
-            VkImageViewCreateInfo createInfo{};
+    VkImageView AveSwapChain::createImageView(VkImage image, VkFormat format) {
+        VkImageViewCreateInfo createInfo{};
             createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            createInfo.image = swapChainImages[i];
+            createInfo.image = image;
 
             createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            createInfo.format = swapChainImageFormat;
+            createInfo.format = format;
 
             createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
             createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
@@ -205,9 +203,19 @@ namespace ave {
             createInfo.subresourceRange.baseArrayLayer = 0;
             createInfo.subresourceRange.layerCount = 1;
 
-            if (vkCreateImageView(aveDevice.device(), &createInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS) {
+
+            VkImageView imageView;
+            if (vkCreateImageView(aveDevice.device(), &createInfo, nullptr, &imageView) != VK_SUCCESS) {
                 throw std::runtime_error("failed to create image views!");
             }
+            return imageView;
+    }
+
+
+    void AveSwapChain::createImageViews() {
+        swapChainImageViews.resize(swapChainImages.size());
+        for (size_t i = 0; i < swapChainImages.size(); i++) {
+            swapChainImageViews[i] = createImageView(swapChainImages[i], swapChainImageFormat);
 
         }
     }

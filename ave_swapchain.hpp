@@ -47,10 +47,11 @@ class AveSwapChain {
   VkResult acquireNextImage(uint32_t *imageIndex);
   VkResult submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex);
 
+  VkImageView createImageView(VkImage image, VkFormat format);
+  void createImageViews();
  private:
   void init();
   void createSwapChain();
-  void createImageViews();
   // void createDepthResources();
   void createRenderPass();
   void createFramebuffers();
