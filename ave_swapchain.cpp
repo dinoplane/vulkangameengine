@@ -184,7 +184,7 @@ namespace ave {
 
     }
 
-    VkImageView AveSwapChain::createImageView(VkImage image, VkFormat format) {
+    VkImageView AveSwapChain::createImageView(VkImage image, VkFormat format, u_int32_t mipLevels) {
         VkImageViewCreateInfo createInfo{};
             createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
             createInfo.image = image;
@@ -199,7 +199,7 @@ namespace ave {
 
             createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
             createInfo.subresourceRange.baseMipLevel = 0;
-            createInfo.subresourceRange.levelCount = 1;
+            createInfo.subresourceRange.levelCount = mipLevels;
             createInfo.subresourceRange.baseArrayLayer = 0;
             createInfo.subresourceRange.layerCount = 1;
 
@@ -215,7 +215,7 @@ namespace ave {
     void AveSwapChain::createImageViews() {
         swapChainImageViews.resize(swapChainImages.size());
         for (size_t i = 0; i < swapChainImages.size(); i++) {
-            swapChainImageViews[i] = createImageView(swapChainImages[i], swapChainImageFormat);
+            swapChainImageViews[i] = createImageView(swapChainImages[i], swapChainImageFormat, 1);
 
         }
     }
