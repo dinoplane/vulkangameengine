@@ -69,9 +69,6 @@ namespace ave {
             VkQueue graphicsQueue_;
             VkQueue presentQueue_;
 
-            VkImage depthImage;
-            VkDeviceMemory depthImageMemory;
-            VkImageView depthImageView;
 
         public:
             AveDevice(AveWindow& window);
@@ -118,6 +115,7 @@ namespace ave {
                 VkMemoryPropertyFlags properties,
                 VkImage &image,
                 VkDeviceMemory &imageMemory);
+            void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
 
         private:
             void createInstance();
@@ -126,7 +124,7 @@ namespace ave {
             void pickPhysicalDevice();
             void createLogicalDevice();
             void createCommandPool();
-            void createDepthResources();
+            // void createDepthResources();
             void createDescriptorPool();
 
             // helper functions

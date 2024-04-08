@@ -9,10 +9,11 @@
 // std lib headers
 #include <string>
 #include <vector>
+#include <array>
 #include <limits>
 #include <cstdlib>
 #include <set>
-#include<memory>
+#include <memory>
 #include <algorithm>
 
 namespace ave {
@@ -42,7 +43,9 @@ class AveSwapChain {
   float extentAspectRatio() {
     return static_cast<float>(swapChainExtent.width) / static_cast<float>(swapChainExtent.height);
   }
-//   VkFormat findDepthFormat();
+  VkFormat findDepthFormat() {
+    return aveDevice.findDepthFormat();
+  }
 
   VkResult acquireNextImage(uint32_t *imageIndex);
   VkResult submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex);
@@ -52,7 +55,7 @@ class AveSwapChain {
  private:
   void init();
   void createSwapChain();
-  // void createDepthResources();
+  void createDepthResources();
   void createRenderPass();
   void createFramebuffers();
   void createSyncObjects();
@@ -75,6 +78,8 @@ class AveSwapChain {
   std::vector<VkImageView> depthImageViews;
   std::vector<VkImage> swapChainImages;
   std::vector<VkImageView> swapChainImageViews;
+
+
 
   AveDevice &aveDevice;
   VkExtent2D windowExtent;

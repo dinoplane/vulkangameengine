@@ -1,7 +1,7 @@
 #include "ave_model.hpp"
 
 namespace ave {
-    AveModel::AveModel(AveDevice& device, const std::vector<Vertex>& vertices, const std::vector<u_int16_t>& indices) : aveDevice{device} {
+    AveModel::AveModel(AveDevice& device, const std::vector<Vertex>& vertices, const std::vector<u_int32_t>& indices) : aveDevice{device} {
         createVertexBuffers(vertices);
         createIndexBuffer(indices);
         createUniformBuffers();
@@ -59,7 +59,7 @@ namespace ave {
         vkFreeMemory(aveDevice.device(), stagingBufferMemory, nullptr);
     }
 
-    void AveModel::createIndexBuffer(const std::vector<u_int16_t> &indices) {
+    void AveModel::createIndexBuffer(const std::vector<u_int32_t> &indices) {
         indexCount = static_cast<u_int32_t>(indices.size());
         VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
 
@@ -107,7 +107,7 @@ namespace ave {
         VkDeviceSize offsets[] = {0};
         vkCmdBindVertexBuffers(commandBuffer, 0, 1, buffers, offsets);
 
-        vkCmdBindIndexBuffer(commandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+        vkCmdBindIndexBuffer(commandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT32);
     }
 
 void AveModel::updateUniformBuffer(uint32_t currentImage, VkExtent2D swapChainExtent) {

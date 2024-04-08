@@ -1,5 +1,5 @@
 #version 450
-
+// Find long lost songs... Japanese and taiwanese 1
 layout(location = 0) in vec3 fragColor;
 layout(location = 1) in vec2 fragTexCoord;
 

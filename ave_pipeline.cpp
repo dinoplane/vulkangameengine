@@ -134,16 +134,16 @@ namespace ave {
         configInfo.colorBlendInfo.blendConstants[2] = 0.0f; // Optional
         configInfo.colorBlendInfo.blendConstants[3] = 0.0f; // Optional
 
-        // configInfo.depthStencilInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-        // configInfo.depthStencilInfo.depthTestEnable = VK_TRUE;
-        // configInfo.depthStencilInfo.depthWriteEnable = VK_TRUE;
-        // configInfo.depthStencilInfo.depthCompareOp = VK_COMPARE_OP_LESS;
-        // configInfo.depthStencilInfo.depthBoundsTestEnable = VK_FALSE;
-        // configInfo.depthStencilInfo.minDepthBounds = 0.0f;  // Optional
-        // configInfo.depthStencilInfo.maxDepthBounds = 1.0f;  // Optional
-        // configInfo.depthStencilInfo.stencilTestEnable = VK_FALSE;
-        // configInfo.depthStencilInfo.front = {};  // Optional
-        // configInfo.depthStencilInfo.back = {};   // Optional
+        configInfo.depthStencilInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+        configInfo.depthStencilInfo.depthTestEnable = VK_TRUE;
+        configInfo.depthStencilInfo.depthWriteEnable = VK_TRUE;
+        configInfo.depthStencilInfo.depthCompareOp = VK_COMPARE_OP_LESS;
+        configInfo.depthStencilInfo.depthBoundsTestEnable = VK_FALSE;
+        configInfo.depthStencilInfo.minDepthBounds = 0.0f;  // Optional
+        configInfo.depthStencilInfo.maxDepthBounds = 1.0f;  // Optional
+        configInfo.depthStencilInfo.stencilTestEnable = VK_FALSE;
+        configInfo.depthStencilInfo.front = {};  // Optional
+        configInfo.depthStencilInfo.back = {};   // Optional
 
 
 
@@ -176,7 +176,7 @@ namespace ave {
         // VkShaderModule vertShaderModule;
         createShaderModule(vertShaderCode, &vertShaderModule);
         // VkShaderModule fragShaderModule;
-        createShaderModule(fragShaderCode, & fragShaderModule);
+        createShaderModule(fragShaderCode, &fragShaderModule);
 
         VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
         vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -223,7 +223,7 @@ namespace ave {
         pipelineInfo.pViewportState = &configInfo.viewportInfo;
         pipelineInfo.pRasterizationState = &configInfo.rasterizationInfo;
         pipelineInfo.pMultisampleState = &configInfo.multisampleInfo;
-        pipelineInfo.pDepthStencilState = nullptr; // Optional
+        pipelineInfo.pDepthStencilState = &configInfo.depthStencilInfo;
         pipelineInfo.pColorBlendState = &configInfo.colorBlendInfo;
         pipelineInfo.pDynamicState = &configInfo.dynamicStateInfo;
 
