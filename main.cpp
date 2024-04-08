@@ -66,6 +66,8 @@ private:
 
     VkImageView textureImageView;
     VkSampler textureSampler;
+
+
 public:
     HelloTriangleApplication(){
         createDescriptorSetLayout();
@@ -100,6 +102,8 @@ public:
 
 private:
 
+
+
     void createTextureSampler() {
         VkSamplerCreateInfo samplerInfo{};
         samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -124,7 +128,7 @@ private:
 
         samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
         samplerInfo.mipLodBias = 0.0f;
-        samplerInfo.minLod = static_cast<float>(mipLevels / 2);
+        samplerInfo.minLod = 0; //static_cast<float>(mipLevels / 2);
         samplerInfo.maxLod = VK_LOD_CLAMP_NONE;
 
 
@@ -134,8 +138,10 @@ private:
 
     }
 
+
+
     void createTextureImageView() {
-        textureImageView = aveSwapChain->createImageView(textureImage, VK_FORMAT_R8G8B8A8_SRGB, mipLevels);
+        textureImageView = aveSwapChain->createImageView(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT, mipLevels);
 
     }
 
@@ -162,7 +168,7 @@ private:
         vkUnmapMemory(aveDevice.device(), stagingBufferMemory);
 
         stbi_image_free(pixels);
-        aveDevice.createImage(texWidth, texHeight, mipLevels, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, textureImage, textureImageMemory);
+        aveDevice.createImage(texWidth, texHeight, mipLevels, VK_SAMPLE_COUNT_1_BIT, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, textureImage, textureImageMemory);
 
         aveDevice.transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, mipLevels);
         aveDevice.copyBufferToImage(stagingBuffer, textureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight), 1);
@@ -429,6 +435,7 @@ private:
 
         ave::PipelineConfigInfo pipelineConfig{};
         AvePipeline::defaultPipelineConfigInfo(pipelineConfig);
+        pipelineConfig.multisampleInfo.rasterizationSamples = aveDevice.getMsaaSamples();
         pipelineConfig.renderPass = aveSwapChain->getRenderPass();
         pipelineConfig.pipelineLayout = pipelineLayout;
         avePipeline = std::make_unique<AvePipeline>(

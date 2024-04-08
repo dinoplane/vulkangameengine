@@ -50,11 +50,12 @@ class AveSwapChain {
   VkResult acquireNextImage(uint32_t *imageIndex);
   VkResult submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex);
 
-  VkImageView createImageView(VkImage image, VkFormat format, uint32_t mipLevels);
+  VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, uint32_t mipLevels);
   void createImageViews();
  private:
   void init();
   void createSwapChain();
+  void createColorResources();
   void createDepthResources();
   void createRenderPass();
   void createFramebuffers();
@@ -80,6 +81,9 @@ class AveSwapChain {
   std::vector<VkImageView> swapChainImageViews;
 
 
+  VkImage colorImage;
+  VkDeviceMemory colorImageMemory;
+  VkImageView colorImageView;
 
   AveDevice &aveDevice;
   VkExtent2D windowExtent;

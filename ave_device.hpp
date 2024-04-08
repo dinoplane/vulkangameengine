@@ -69,6 +69,7 @@ namespace ave {
             VkQueue graphicsQueue_;
             VkQueue presentQueue_;
 
+            VkSampleCountFlagBits msaaSamples = VK_SAMPLE_COUNT_1_BIT;
 
         public:
             AveDevice(AveWindow& window);
@@ -86,6 +87,8 @@ namespace ave {
             VkSurfaceKHR surface() { return surface_; }
             VkQueue graphicsQueue() { return graphicsQueue_; }
             VkQueue presentQueue() { return presentQueue_; }
+            VkSampleCountFlagBits getMsaaSamples() { return msaaSamples; }
+
 
             bool hasStencilComponent(VkFormat format) {
                 return format == VK_FORMAT_D32_SFLOAT_S8_UINT || format == VK_FORMAT_D24_UNORM_S8_UINT;
@@ -115,7 +118,7 @@ namespace ave {
                 VkMemoryPropertyFlags properties,
                 VkImage &image,
                 VkDeviceMemory &imageMemory);
-            void createImage(uint32_t width, uint32_t height, uint32_t mipLevels, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
+            void createImage(uint32_t width, uint32_t height, uint32_t mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
 
         private:
             void createInstance();
@@ -128,6 +131,7 @@ namespace ave {
             void createDescriptorPool();
 
             // helper functions
+            VkSampleCountFlagBits getMaxUsableSampleCount();
             bool checkValidationLayerSupport();
             void populateDebugUtilMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT &createInfo);
             std::vector<const char*> getRequiredExtensions();
