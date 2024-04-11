@@ -3,9 +3,7 @@
 #include "ave_device.hpp"
 #include "ave_model.hpp"
 
-#include <string>
 #include <fstream>
-#include <vector>
 
 namespace ave{
 

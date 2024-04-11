@@ -4,10 +4,8 @@
 #include <GLFW/glfw3.h>
 
 #include "ave_constants.h"
-
 #include "ave_window.hpp"
-#include <string>
-#include <vector>
+
 #include <array>
 #include <iostream>
 #include <cstdlib>

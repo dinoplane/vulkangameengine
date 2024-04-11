@@ -7,8 +7,6 @@
 #include "ave_device.hpp"
 
 // std lib headers
-#include <string>
-#include <vector>
 #include <array>
 #include <limits>
 #include <cstdlib>

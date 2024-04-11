@@ -16,7 +16,7 @@
 #include <vector>
 #include <cassert>
 #include <cstring>
-
+#include <memory>
 #include <chrono>
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -109,6 +109,12 @@ namespace ave {
 
             VkBuffer& getUniformBuffer(size_t i) { return uniformBuffers[i]; }
 
+            // static AveModel* createModelFromObjFile(AveDevice& device, const std::string& filePath);
+
+            static AveModel* createUVSphereModel(AveDevice& device);
+
+
+
         private:
             void createVertexBuffers(const std::vector<Vertex> &vertices);
             void createIndexBuffer(const std::vector<u_int32_t>& indices);
@@ -125,6 +131,8 @@ namespace ave {
             std::vector<VkBuffer> uniformBuffers;
             std::vector<VkDeviceMemory> uniformBuffersMemory;
             std::vector<void*> uniformBuffersMapped;
+
+
 
 
     };
