@@ -3,7 +3,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
-
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tinyobjloader/tiny_obj_loader.h>
 
@@ -20,7 +19,7 @@ namespace ave{
         createDescriptorSets();
     }
 
-   AveApp::~AveApp(){
+    AveApp::~AveApp(){
         vkDestroySampler(aveDevice.device(), textureSampler, nullptr);
         vkDestroyImageView(aveDevice.device(), textureImageView, nullptr);
         vkDestroyImage(aveDevice.device(), textureImage, nullptr);
@@ -29,6 +28,7 @@ namespace ave{
         vkDestroyDescriptorSetLayout(aveDevice.device(), descriptorSetLayout, nullptr);
         vkDestroyPipelineLayout(aveDevice.device(), pipelineLayout, nullptr);
     };
+
     void AveApp::run() {
         while (!aveWindow.shouldClose()) {
             glfwPollEvents();
@@ -36,7 +36,6 @@ namespace ave{
         }
         vkDeviceWaitIdle(aveDevice.device());
     }
-
 
     void AveApp::createDescriptorSetLayout(){
         {
@@ -274,36 +273,36 @@ namespace ave{
 
 
 
-            std::vector<Vertex> vertices;
-            std::vector<Vertex> vertices2;
+            // std::vector<Vertex> vertices;
+            // std::vector<Vertex> vertices2;
 
             // FirstApp::triforce(vertices,
             //     {{0.0f, -1.0f}, {1.0, 0.0, 1.0}},
             //     {{1.0f, 1.0f}, {1.0, 1.0, 0.0}},
             //     {{-1.0f, 1.0f}, {0.0, 1.0, 1.0}},
             //     7);
-            vertices2.insert(vertices2.end(),{
-                {{-0.5f, -0.5f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-                {{0.5f, -0.5f, 1.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-                {{0.5f, 0.5f, 1.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-                {{-0.5f, 0.5f, 1.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+            // vertices2.insert(vertices2.end(),{
+            //     {{-0.5f, -0.5f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+            //     {{0.5f, -0.5f, 1.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+            //     {{0.5f, 0.5f, 1.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+            //     {{-0.5f, 0.5f, 1.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
 
-                {{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-                {{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-                {{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-                {{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
-            });
+            //     {{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+            //     {{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+            //     {{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+            //     {{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
+            // });
 
-            std::vector<uint32_t> indices;// = {
-            //     0, 1, 2, 2, 3, 0,
-            //     4, 5, 6, 6, 7, 4
+            // std::vector<uint32_t> indices;// = {
+            // //     0, 1, 2, 2, 3, 0,
+            // //     4, 5, 6, 6, 7, 4
+            // // };
+
+
+            // std::vector<uint32_t> indices2 = {
+            //     0, 1, 2,
+            //     4, 5, 6
             // };
-
-
-            std::vector<uint32_t> indices2 = {
-                0, 1, 2,
-                4, 5, 6
-            };
 
 
             // size_t NUM_FACE_EDGES = 36;
@@ -340,49 +339,49 @@ namespace ave{
             //     indices.push_back((i+1) % (NUM_FACE_EDGES - 1));
             // }
 
-            size_t RESOLUTION = 36;
-            size_t NUM_HEIGHT = 5;
-            float start_height = -0.3f;
-            float delta_z = 1.0f / static_cast<float>(RESOLUTION);
-            float delta_theta = 2*M_PI / static_cast<float>(RESOLUTION);
+            // size_t RESOLUTION = 36;
+            // size_t NUM_HEIGHT = 5;
+            // float start_height = -0.3f;
+            // float delta_z = 1.0f / static_cast<float>(RESOLUTION);
+            // float delta_theta = 2*M_PI / static_cast<float>(RESOLUTION);
 
-            for (size_t j = 0; j < RESOLUTION; j++) {
-                float z =  (j * delta_z);
-                float r =  0.5*sin(M_PI * j / RESOLUTION);
-                for (size_t i = 0; i < RESOLUTION; i++){
+            // for (size_t j = 0; j < RESOLUTION; j++) {
+            //     float z =  (j * delta_z);
+            //     float r =  0.5*sin(M_PI * j / RESOLUTION);
+            //     for (size_t i = 0; i < RESOLUTION; i++){
 
-                    Vertex vertex{};
+            //         Vertex vertex{};
 
 
-                    vertex.pos = {
-                        r * cos(M_PI * 2 * i / RESOLUTION ),
-                        r * sin(M_PI * 2 * i / RESOLUTION ),
-                        start_height + 0.5*cos(M_PI * j / RESOLUTION)
-                    };
+            //         vertex.pos = {
+            //             r * cos(M_PI * 2 * i / RESOLUTION ),
+            //             r * sin(M_PI * 2 * i / RESOLUTION ),
+            //             start_height + 0.5*cos(M_PI * j / RESOLUTION)
+            //         };
 
-                    vertex.texCoord = {
-                        0.5f + 0.5f * cos(i * delta_theta),
-                        0.5f + 0.5f * sin(i * delta_theta)
-                    };
+            //         vertex.texCoord = {
+            //             0.5f + 0.5f * cos(i * delta_theta),
+            //             0.5f + 0.5f * sin(i * delta_theta)
+            //         };
 
-                    vertex.color = {1.0f, 1.0f, 1.0f};
+            //         vertex.color = {1.0f, 1.0f, 1.0f};
 
-                    vertices.push_back(vertex);
+            //         vertices.push_back(vertex);
 
-                }
-            }
+            //     }
+            // }
 
-            for (size_t j = 0; j < RESOLUTION - 1; j++) {
-                for (size_t i = 0; i < RESOLUTION; i++){
-                    indices.push_back(j*RESOLUTION + i);
-                    indices.push_back(j*RESOLUTION + ((i+1) % RESOLUTION));
-                    indices.push_back((j+1)*RESOLUTION + i);
+            // for (size_t j = 0; j < RESOLUTION - 1; j++) {
+            //     for (size_t i = 0; i < RESOLUTION; i++){
+            //         indices.push_back(j*RESOLUTION + i);
+            //         indices.push_back(j*RESOLUTION + ((i+1) % RESOLUTION));
+            //         indices.push_back((j+1)*RESOLUTION + i);
 
-                    indices.push_back((j+1)*RESOLUTION + i);
-                    indices.push_back(j*RESOLUTION + ((i+1) % RESOLUTION));
-                    indices.push_back((j+1)*RESOLUTION + ((i+1) % RESOLUTION));
-                }
-            }
+            //         indices.push_back((j+1)*RESOLUTION + i);
+            //         indices.push_back(j*RESOLUTION + ((i+1) % RESOLUTION));
+            //         indices.push_back((j+1)*RESOLUTION + ((i+1) % RESOLUTION));
+            //     }
+            // }
 
             // tinyobj::attrib_t attrib;
             // std::vector<tinyobj::shape_t> shapes;
@@ -423,8 +422,9 @@ namespace ave{
             //     }
             // }
 
-            aveModel = std::make_unique<AveModel>(aveDevice, vertices, indices);
-            aveModel2 = std::make_unique<AveModel>(aveDevice, vertices2, indices2);
+            // aveModel = std::make_unique<AveModel>(aveDevice, vertices, indices);
+            aveModel = ave::AveModel::createCubeModel(aveDevice);
+            // aveModel2 = std::make_unique<AveModel>(aveDevice, vertices2, indices2);
         }
 
     void AveApp::generateMipmaps(VkImage image, VkFormat imageFormat, int32_t texWidth, int32_t texHeight, uint32_t mipLevels) {        // Check if image format supports linear blitting
@@ -527,7 +527,7 @@ namespace ave{
             throw std::runtime_error("failed to begin recording command buffer!");
         }
         aveModel->updateUniformBuffer(aveSwapChain->getCurrentFrame(), aveSwapChain->getSwapChainExtent());
-
+        // aveModel->updateModel();
 
         // Begin Drawing
 
@@ -568,11 +568,11 @@ namespace ave{
         vkCmdBindDescriptorSets(commandBuffers[imageIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[aveSwapChain->getCurrentFrame()], 0, nullptr);
         aveModel->draw(commandBuffers[imageIndex]);
 
-        aveModel2->bind(commandBuffers[imageIndex]);
+        // aveModel2->bind(commandBuffers[imageIndex]);
 
         // vkCmdDraw(commandBuffers[imageIndex], 3, 1, 0, 0);
         // vkCmdBindDescriptorSets(commandBuffers[imageIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[aveSwapChain->getCurrentFrame()], 0, nullptr);
-        aveModel2->draw(commandBuffers[imageIndex]);
+        // aveModel2->draw(commandBuffers[imageIndex]);
 
 
         vkCmdEndRenderPass(commandBuffers[imageIndex]);

@@ -33,6 +33,7 @@ private:
 
     std::unique_ptr<AveModel> aveModel;
     std::unique_ptr<AveModel> aveModel2;
+    std::vector<std::unique_ptr<AveModel>> models;
 
 
     uint32_t mipLevels;
