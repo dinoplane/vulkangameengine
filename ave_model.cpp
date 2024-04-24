@@ -118,7 +118,7 @@ namespace ave {
         // const std::vector<Vertex> vertices_;
         // std::cout << origVertices_[0].pos.y << std::endl;
         for(size_t i = 0; i < origVertices_.size(); i++){
-            stagingVertices_[i].pos.z = origVertices_[i].pos.z + 2.0 * sin(time);
+            stagingVertices_[i].pos.y = origVertices_[i].pos.z + 2.0 * sin(time);
         }
         // std::cout << stagingVertices_[0].pos.y << std::endl;
 
@@ -155,7 +155,7 @@ namespace ave {
         float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
         UniformBufferObject ubo{};
-        ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(1.0f, 0.0, sin(time)));
+        ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(1.0, 0.0, sin(time)));
         ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
         ubo.proj = glm::perspective(glm::radians(45.0f), swapChainExtent.width / (float) swapChainExtent.height, 0.1f, 10.0f);
         ubo.proj[1][1] *= -1;
